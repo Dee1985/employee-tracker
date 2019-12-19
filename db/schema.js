@@ -6,14 +6,14 @@ USE employee_trackerDB;
 
 CREATE TABLE employee
 (
-  id INT(50) AUTO_INCREMENT,
+  id INT AUTO_INCREMENT,
   first_name VARCHAR(30),
   last_name VARCHAR(30),
   role_id INT,
   manager_id INT,
   PRIMARY KEY(id),
   FOREIGN KEY (role_id) REFRENCES role(id)
-  FOREIGN KEY (manager_id) REFRENCES role(id)
+  //FOREIGN KEY (manager_id) REFRENCES role(id)
 );
 
 CREATE TABLE role
@@ -28,7 +28,7 @@ CREATE TABLE role
 
 CREATE TABLE department
 (
-  id INT(50) AUTO_INCREMENT,
+  id INT AUTO_INCREMENT,
   name VARCHAR(30),
   PRIMARY KEY(id),
 );
