@@ -6,7 +6,7 @@ USE employee_trackerDB;
 
 CREATE TABLE employee
 (
-  id INT(50) AUTO_INCREMENT PK,
+  id INT(50) AUTO_INCREMENT,
   first_name VARCHAR(30),
   last_name VARCHAR(30),
   role_id INT,
