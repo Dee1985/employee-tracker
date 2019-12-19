@@ -15,4 +15,5 @@ function startQ() {
     })
 
     }
+};
 startQ();

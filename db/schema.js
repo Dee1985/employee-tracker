@@ -36,7 +36,8 @@ CREATE TABLE department
 
 /**
   department:
-  id - INT PRIMARY KEY
+  
+id - INT PRIMARY KEY
   
   name - VARCHAR(30) to hold department name
   
