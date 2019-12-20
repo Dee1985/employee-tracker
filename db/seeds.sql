@@ -1,36 +1,25 @@
 USE employee_trackerDB,
 
-// role_id INT FKto hold reference to role employee has
-// manager_id INT FK to hold reference to another employee that manager of the current employee. This field may be null if the employee has no manager
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES 
-    ("John", "Doe"),
-    ("Daphne", "Moon"),
-    ("Frasier", "Crane"),
-    ("Donna", "Prett"),
-    ("Karl", "Timber"),
-    ("Sarah", "Lake");
-
-// department_id INT FK to hold reference to department role belongs to
-INSERT INTO role (title, salary, department_id)
-VALUES 
-    ("manager", 100000,?),
-    ("lawyer", 150000,?),
-    ("accountant", 75000,?),
-    ("tech lead", 80000,?),
-    ("engineer", 85000,?),
-    ("junior engineer", 60000,?),
-
-INSERT INTO department (id, name)
+-- role_id INT FKto hold reference to role employee has
+-- manager_id INT FK to hold reference to another employee that manager of the current employee. This field may be null if the employee has no manager
+INSERT INTO department (name)
 VALUES 
     ("Human Resources"),
     ("legal"),
-    ("accounting"),    
-    ("tech"),   
-    ("dev"),  
-    ("dev"),
+  
+INSERT INTO role (title, salary, department_id)
+VALUES 
+    ("manager", 100000,1 ),
+    ("employee", 150000,2),
+   
 
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES 
+    ("John", "Doe",7,NULL),
+    ("Daphne", "Moon",8,NULL),
+   
 
+-- department_id INT FK to hold reference to department role belongs to
 /*
 Build a command-line application that at a minimum allows the user to:
     Add departments, roles, employees

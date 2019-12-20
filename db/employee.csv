@@ -1,0 +1,3 @@
+id,first_name,last_name,role_id,manager_id
+3,John,Doe,2,4
+4,Daphne,Moon,1,NULL
