@@ -1,122 +1,227 @@
-  // Dependencies
-const connection = require("./db/db.js");
+// Dependencies
+const connection = require("./db/db.js")
+const inquirer = require('inquirer')
 const cTable = require("console.table")
-const inquirer = require('inquirer');
+const mysql = require("mysql")
 
 // ====================================================================================================================
 // Inquirer prompt and promise
 function askQ(){
-  inquirer
-  .prompt({
-    type: 'list',
-    name:'startQ',
-    message: 'What would you like to do?',
-    choices: [
-      'view all employees',
-      'view all department',
-      'view all roles',
-      'add employee',
-      'remove employe',
-      'update employee role',
-      'update employee manager',    
-    ]
-  }).then (function(answer){
-    console.log(answer)
-    // start of switch statment for user choice
-    switch (answer.startQ) {
-      case "view all employees":
-        viewallemployees() 
-        break;
-      
-      case "view all roles":
-        viewallroles()  
-        break;
+  inquirer.prompt({
+      type: "list",
+      name: "startQ",
+      message: "What would you like to do?",
+      choices: [
+        "view all employees",
+        "view all roles",
+        "view all departments",
+        "add employee",
+        "add department",
+        "add role"
+      ]
+  }).then(function(answer) {
+      console.log(answer);
+      // start of switch statment for user choice
+      switch (answer.startQ) {
+        case "view all employees":
+          viewallemployees();
+          break;
 
-      case "view all departments":
-        viewalldepartments()
-        break;   
-    
-      case "add employee":
-        addEmployee()
-        break;
+        case "view all roles":
+          viewallroles();
+          break;
 
-      case "remove employee":
-        removeEmployee()
-        break;
+        case "view all departments":
+          viewalldepartments();
+          break;
 
-      case "update employee role":
-        updateEmpRole()
-        break;
+        case "add employee":
+          addEmployee();
+          break;
 
-      case "update employee manager":
-        updateEmpManager()
-        break;        
-    }
-  });
+        case "update employee role":
+          updateEmpRole();
+          break;
+
+        case "add department":
+          addDepartment();
+          break;
+
+        case "add role":
+          addRole();
+          break;
+      }
+    });
 }  
 askQ();
 
+
 // ==================================================================================================================
 // functions and queryies for different user selections
-function viewallemployees(){
-  console.log("retrieving employees from db")
+function viewalldepartments(){
   // mysql command to retieve employee table
-  connection.query("SELECT * FROM employee", function(err, data){
-    console.log(data, err);
-      askQ()
-  })
-}
+    connection.query("SELECT * FROM department", function(err, result){
+     
+    console.log("retrieving departments from db");
+    console.table(result);
+    }) 
+     
+     askQ();
+};
 
 function viewallroles(){
-  console.log("retrieving roles from database")
+ 
   // mysql command to retrieve role table
-  connection.query("SELECT * FROM role", function(err, data){
-    console.table(data)
-      askQ()
-  })
-}
+    connection.query("SELECT * FROM role", function(err, answer){
+      console.log("retrieving roles from database");
+      console.table (answer);
+       
+    })
+     askQ();
+};
 
-function viewalldepartments(){
-  console.log("retrieving departments from database")
+function viewallemployees(){
+  console.log("retrieving employess from database")
   // mysql command to retrieve department table
-  connection.query("SELECT * FROM department", function(err, data){
-    console.log(data, err)
-      askQ()
+  connection.query("SELECT * FROM employee", function(err,answer){
+    console.table(answer)
+      
   })
+  askQ()
 }
 
 function addEmployee(){
-  console.log("enter employee name to add")
-  // mysql command to add info to table
-  connection.query("", function(err, data){
-    console.log(data, err)
-      askQ()
-  })
+  inquirer.prompt([
+    {
+        type: 'input',
+        message: 'enter employee name', 
+        name:'firstname',
+    },
+    {
+        type: 'input',
+        message: 'enter employee last name',
+        name:'lastname',
+        
+    },  
+]).then (function(answer){
+  
+    connection.query("INSERT INTO employee SET ?",
+          {
+         // column: value
+            first_name: answer.firstname,
+            last_name: answer.lastname,
+            role_id: (null),
+            manager_id: (null)
+          },
+            function(err, answer){
+              if (err) {
+                throw (err)
+             }
+                console.table(answer);
+                  
+         });
+      askQ();
+    })
+
 }
 
-function removeEmployee(){
-  console.log("enter employee name to remove")
-  // mysql command to delete info from a table by id
-  connection.query("", function(err, data){
-    console.log(data, err)
-      askQ()
-  })
+/**
+  function updateEmpRole(){
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "updaterole"
+          message: "select employee to update role",
+          choices: [
+            "John Doe"
+            "Daphne Moon"
+          ]
+        },
+        {
+          type: "input",
+          message: "enter employee's new role",
+          name: "newrole"
+        }
+      ])
+      .then(function(answer) {
+        connection.query(
+          //UPDATE [table] SET [column] = '[updated-value]' WHERE [column] = [value];
+          
+          function(err, answer) {
+            if (err) {
+              throw (err);
+            }
+            console.table(answer);
+            askQ();
+          }
+        );
+      });  
+  }
+  
+*/
+function addDepartment(){
+  inquirer.prompt(
+    {
+     type: "input",
+     message: "enter department name",       
+     name: "dept"              
+    }
+).then (function(answer){
+    connection.query(
+      "INSERT INTO department SET ?",
+      {
+        // column: value
+        name: answer.dept //help from Paul Cheng
+      },
+      function(err, answer) {
+        if (err) {
+          throw err;
+        }
+      }
+    ),
+      console.table();
+          askQ();     
+    
+     
+}); 
+        // Insert into department table
 }
-
-function updateEmpRole(){
-  console.log("select employee")
-  // mysql command to alter table info by role_id
-  connection.query("", function(err, data){
-    console.log(data, err)
-      askQ()
-  })
-}
-
-function updateEmpManager(){
-  console.log("select employee")
-  // mysql command to alter table info by manager_id
-  connection.query("", function(err, data){
-    console.log(data, err)
-      askQ()
-  })
-}
+ 
+   function addRole() {
+      inquirer.prompt([
+        {
+          type: "input",
+          message: "enter employee title",       
+          name: "addtitle"       
+        },
+        {
+          type: "input",
+          message: "enter employee salary",       
+          name: "addsalary"              
+        },      
+        {
+          type: "input",
+          message: "enter employee department id",
+          name: "addDepId"
+        }
+      ]).then(function(answer){ 
+       
+          connection.query("INSERT INTO role SET ?",
+            {
+           // column: value
+              title: answer.addtitle,
+              salary: answer.addsalary,
+              department_id: answer.addDepId
+            },
+              function(err, answer){
+                if (err) {
+                  throw (err)
+               }
+                  console.table(answer)
+                    
+          })
+          askQ()
+      });            
+      
+   }

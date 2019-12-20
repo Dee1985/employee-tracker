@@ -1,0 +1,6 @@
+id,first_name,last_name,role_id,manager_id
+3,Daphne,Moon,1,NULL
+4,John,Doe,2,3
+7,nicole,larsen,NULL,NULL
+8,test,test,NULL,NULL
+9,tiny,tim,NULL,NULL

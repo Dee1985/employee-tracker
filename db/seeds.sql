@@ -4,20 +4,19 @@ USE employee_trackerDB,
 -- manager_id INT FK to hold reference to another employee that manager of the current employee. This field may be null if the employee has no manager
 INSERT INTO department (name)
 VALUES 
-    ("Human Resources"),
-    ("legal"),
+    ("Management"),
+    ("legal")
   
 INSERT INTO role (title, salary, department_id)
 VALUES 
     ("manager", 100000,1 ),
-    ("employee", 150000,2),
+    ("employee", 150000,2)
    
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES 
-    ("John", "Doe",7,NULL),
-    ("Daphne", "Moon",8,NULL),
-   
+    ("Daphne", "Moon",1,NULL),
+    ("John", "Doe",2,3)
 
 -- department_id INT FK to hold reference to department role belongs to
 /*
