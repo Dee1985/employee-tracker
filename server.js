@@ -19,7 +19,8 @@ const askQ = function() {
         "add employee",
         "add department",
         "add role",
-        "update employee role"
+        "update employee role",
+        "remove employee"
       ]
     })
     .then(function(answer) {
@@ -53,52 +54,54 @@ const askQ = function() {
         case "add role":
           addRole();
           break;
+
+        case "remove Employee":
+          removeEmployee();
       }
     });
 };
 askQ();
 
-// functions and queryies for different user selections
+// allows user to view all departments currently in the database
 function viewalldepartments() {
-  // mysql command to retieve employee table
   connection.query("SELECT * FROM department", function(err, answer) {
-    console.log("retrieving departments from db", "\n");
+    console.log("\n Departments Retrieved from Database \n");
     console.table(answer);
   });
-
   askQ();
 }
 
+// allows user to view all employee roles currently in the database
 function viewallroles() {
-  // mysql command to retrieve role table
   connection.query("SELECT * FROM role", function(err, answer) {
-    console.log("retrieving roles from database", "\n");
+    console.log("\n Roles Retrieved from Database \n");
     console.table(answer);
   });
   askQ();
 }
 
+// allows user to view all employees currently in the database
 function viewallemployees() {
   console.log("retrieving employess from database");
-  // mysql command to retrieve department table
   connection.query("SELECT * FROM employee", function(err, answer) {
-    console.log("retrieving employees from database", "\n");
+    console.log("\n Employees retrieved from Database \n");
     console.table(answer);
   });
   askQ();
 }
 
+// allows user to add a new employee to database
 function addEmployee() {
   inquirer
     .prompt([
       {
         type: "input",
-        message: "enter employee name",
+        message: "Enter employee first name",
         name: "firstname"
       },
       {
         type: "input",
-        message: "enter employee last name",
+        message: "Enter employee last name",
         name: "lastname"
       }
     ])
@@ -106,7 +109,6 @@ function addEmployee() {
       connection.query(
         "INSERT INTO employee SET ?",
         {
-          // column: value
           first_name: answer.firstname,
           last_name: answer.lastname,
           role_id: null,
@@ -123,54 +125,57 @@ function addEmployee() {
     });
 }
 
-
-function updateEmpRole(){
-  let allemp = []
+// grabs all employees (id, first name, last name) and then allows user to select employee to update role
+// https://www.guru99.com/delete-and-update.html
+function employeeRoleUpdate() {
+  let allemp = [];
   connection.query("SELECT * FROM employee", function(err, answer) {
-    // console.log("retrieving employees from database", "\n");
     // console.log(answer);
-    for (let i = 0; i < answer.length; i++){
-      let empstr = answer[i].id + " " + answer[i].first_name + " " + answer[i].last_name
-      allemp.push(empstr)
+    for (let i = 0; i < answer.length; i++) {
+      let employeeString =
+        answer[i].id + " " + answer[i].first_name + " " + answer[i].last_name;
+      allemp.push(employeeString);
     }
     // console.log(allemp)
-  
-inquirer.prompt([
-	{
-		type: "list",
-    name: "employeeToUpdate",
-    message: "select employee to update role",
-    choices: allemp
-  },
-	{
-		type: "list",
-    message: "select new role",
-    choices:
-    [
-      "manager",
-      "employee",
-    ],
-    name: "newrole"
-  }
-])
-.then(function(answer) {
-  console.log("about to update", answer)
-  const idToUpdate = {}
-  idToUpdate.employeeId = parseInt(answer.employeeToUpdate.split(" ")[0])
-    if (answer.newrole === "manager"){
-      idToUpdate.role_id = 1
-    } else if (answer.newrole === "employee"){
-      idToUpdate.role_id = 2
-    }
 
-	connection.query(
-    "UPDATE employee SET role_id = ? WHERE id = ?", [idToUpdate.role_id, idToUpdate.employeeId], function(err, data) {
-		askQ()	
-    });
-    });  
-});
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "employeeRoleUpdate",
+          message: "select employee to update role",
+          choices: allemp
+        },
+        {
+          type: "list",
+          message: "select new role",
+          choices: ["manager", "employee"],
+          name: "newrole"
+        }
+      ])
+      .then(function(answer) {
+        console.log("about to update", answer);
+        const idToUpdate = {};
+        idToUpdate.employeeId = parseInt(
+          answer.employeeRoleUpdate.split(" ")[0]
+        );
+        if (answer.newrole === "manager") {
+          idToUpdate.role_id = 1;
+        } else if (answer.newrole === "employee") {
+          idToUpdate.role_id = 2;
+        }
+        connection.query(
+          "UPDATE employee SET role_id = ? WHERE id = ?",
+          [idToUpdate.role_id, idToUpdate.employeeId],
+          function(err, data) {
+            askQ();
+          }
+        );
+      });
+  });
 }
 
+// allows user to add a new department into the database
 function addDepartment() {
   inquirer
     .prompt({
@@ -182,8 +187,7 @@ function addDepartment() {
       connection.query(
         "INSERT INTO department SET ?",
         {
-          // column: value
-          name: answer.dept //help from Paul Cheng
+          name: answer.dept
         },
         function(err, answer) {
           if (err) {
@@ -191,12 +195,12 @@ function addDepartment() {
           }
         }
       ),
-        console.table();
+        console.table(answer);
       askQ();
     });
-  // Insert into department table
 }
 
+// allows user to add a new role/title
 function addRole() {
   inquirer
     .prompt([
@@ -220,7 +224,6 @@ function addRole() {
       connection.query(
         "INSERT INTO role SET ?",
         {
-          // column: value
           title: answer.addtitle,
           salary: answer.addsalary,
           department_id: answer.addDepId
