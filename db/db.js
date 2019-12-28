@@ -1,23 +1,22 @@
 const mysql = require("mysql");
 
 const connection = mysql.createConnection({
-  host: "localhost",
+	host: "localhost",
 
-  // Your port
-  port: 3306,
+	// Your port
+	port: 3306,
 
-  // Your username
-  user: "root",
+	// Your username
+	user: "root",
 
-  // Your password
-  password: "root",
-  database: "employee_trackerDB"
+	// Your password
+	password: "root",
+	database: "employee_trackerDB",
 });
 
 connection.connect(function(err) {
-  if (err) throw err;
-   console.log("connected as id " + connection.threadId);
+	if (err) throw err;
+	// console.log("connected as id " + connection.threadId);
 });
-
 
 module.exports = connection;
