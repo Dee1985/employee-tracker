@@ -6,36 +6,34 @@ Description:
 This repository was for creating an opportunity to update my working portfolio.
 
 Usage:
-The usage of this application is for a user to be able to create a note, save a note, review previous notes and delete previous notes.
+The usage of this application is for a user to be able to use a command-line application that allows the user to:
+
+Add departments, roles, employees
+View departments, roles, employees
+Update employee roles
+Update employee managers
 
 App instructions:
-i). Enter title and notes in appropriate fields. Upon entering data in both fields, a save icon will appear.
-
-ii). Click save icon and refresh screen. The new note will appear in the sidebar.
-
-iii). Click wastebin icon and refresh screen to delete a note.
+i). use arrow keys for selections and follow prompts accordingly
 
 Demo:
-![Note writer demo clip](https://github.com/Dee1985/NoteWriter-express/blob/master/img/vid_clip.gif)
+![emp-tracker giphy](https://github.com/Dee1985/employee-tracker/blob/master/img/employee-tracker.gif)
 
 Installation:
 package.json
 npm i mySQL
-npm i body-parser
-npm i express
+npm i inquirer
+npm i console.table
 
 Contributions:
 My tutor Tom McCarthy from Trilogy
 
 Challenges:
 
-- I couldn't figure out why my routes weren't working then realized I had to move the GET request with the asterisk to the bottom of the screen.
-
-- Seperation of concerns and file path- remembering to export and require when needed.
-
-- Learning how to use mySQL workbench was challenging, but in the end, just another tool in my belt.
+- Joining the different databases to make a cohesive view was challenging.
+- The employee managers are able to be viewed but not in it's own category.
 
 Successes:
 The app is functional!
 
-Roadmap: Creating this app was a good introduction to databases.
+Roadmap: Attempting bonus tasks of removing employees, departments and roles. Did not include fuction to total salary of departments.
