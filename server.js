@@ -54,9 +54,6 @@ const askQ = function() {
         case "add role":
           addRole();
           break;
-
-        case "remove Employee":
-          removeEmployee();
       }
     });
 };
@@ -83,7 +80,9 @@ function viewallroles() {
 // allows user to view all employees currently in the database
 function viewallemployees() {
   console.log("retrieving employess from database");
-  connection.query("SELECT * FROM employee", function(err, answer) {
+  var fancyQuery =
+    "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department on role.department_id = department.id;";
+  connection.query(fancyQuery, function(err, answer) {
     console.log("\n Employees retrieved from Database \n");
     console.table(answer);
   });
@@ -127,7 +126,7 @@ function addEmployee() {
 
 // grabs all employees (id, first name, last name) and then allows user to select employee to update role
 // https://www.guru99.com/delete-and-update.html
-function employeeRoleUpdate() {
+function updateEmpRole() {
   let allemp = [];
   connection.query("SELECT * FROM employee", function(err, answer) {
     // console.log(answer);
@@ -142,7 +141,7 @@ function employeeRoleUpdate() {
       .prompt([
         {
           type: "list",
-          name: "employeeRoleUpdate",
+          name: "updateEmpRole",
           message: "select employee to update role",
           choices: allemp
         },
@@ -156,9 +155,7 @@ function employeeRoleUpdate() {
       .then(function(answer) {
         console.log("about to update", answer);
         const idToUpdate = {};
-        idToUpdate.employeeId = parseInt(
-          answer.employeeRoleUpdate.split(" ")[0]
-        );
+        idToUpdate.employeeId = parseInt(answer.updateEmpRole.split(" ")[0]);
         if (answer.newrole === "manager") {
           idToUpdate.role_id = 1;
         } else if (answer.newrole === "employee") {
